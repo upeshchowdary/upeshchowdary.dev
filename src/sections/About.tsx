@@ -44,6 +44,8 @@ export default function About() {
             <div aria-hidden className="absolute inset-[8%_6%_10%] rounded-full bg-[radial-gradient(closest-side,rgba(255,77,31,0.38),rgba(255,77,31,0.08)_55%,transparent)] blur-2xl" />
             <img
               src="/images/portrait-duo.webp"
+              srcSet="/images/portrait-duo-sm.webp 820w, /images/portrait-duo.webp 1524w"
+              sizes="(min-width: 768px) 40vw, 90vw"
               alt={`${person.fullName} — portrait`}
               className="absolute inset-0 h-full w-full object-contain"
               width={1524}
@@ -54,6 +56,8 @@ export default function About() {
             <img
               data-develop
               src="/images/portrait.webp"
+              srcSet="/images/portrait-sm.webp 820w, /images/portrait.webp 1524w"
+              sizes="(min-width: 768px) 40vw, 90vw"
               alt=""
               aria-hidden
               className="absolute inset-0 h-full w-full object-contain [mask-image:linear-gradient(to_top,#000_42%,transparent_58%)] [mask-size:100%_300%] [mask-position:0%_100%] [-webkit-mask-image:linear-gradient(to_top,#000_42%,transparent_58%)] [-webkit-mask-size:100%_300%] [-webkit-mask-position:0%_100%]"

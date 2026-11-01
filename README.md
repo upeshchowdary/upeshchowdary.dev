@@ -13,7 +13,8 @@ agent core → agent network → CUBE → data terrain → globe → market line
 
 - **Vite + React 19 + TypeScript**, **Tailwind CSS v4**
 - **GSAP** (ScrollTrigger, SplitText, ScrambleText) + **Lenis** smooth scroll
-- **three.js / React Three Fiber** with custom GLSL (simplex-noise morphing, mouse repulsion)
+- **three.js** (lean, no React renderer) with custom GLSL — simplex-noise morphing, depth glow, signal packets, mouse repulsion
+- Animated **system maps** (SVG + GSAP DrawSVG) and live charts — every case study shows its architecture
 - Type: Cabinet Grotesk (Fontshare), Instrument Serif, JetBrains Mono
 
 ## Develop
@@ -42,4 +43,5 @@ src/
 ## Deploy
 
 Configured for **Vercel** (`vercel.json`): framework Vite, build `npm run build`, output `dist`.
-Respects `prefers-reduced-motion` (no WebGL, no smooth scroll).
+Respects `prefers-reduced-motion` (no WebGL, no smooth scroll). Sections mount progressively in idle time;
+Lighthouse (local): desktop 93 / mobile ~76 performance, 96 accessibility, 100 best practices, 100 SEO.

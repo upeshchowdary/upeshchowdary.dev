@@ -11,7 +11,7 @@ const links = [
   { id: 'contact', label: 'Contact' },
 ]
 
-export default function Nav({ ready }: { ready: boolean }) {
+export default function Nav({ ready, sectionsReady }: { ready: boolean; sectionsReady: boolean }) {
   const bar = useRef<HTMLElement>(null)
   const [chapter, setChapter] = useState(chapters[0])
   const [open, setOpen] = useState(false)
@@ -38,7 +38,7 @@ export default function Nav({ ready }: { ready: boolean }) {
       },
     })
     return () => { triggers.forEach((t) => t?.kill()); hide.kill() }
-  }, { dependencies: [ready, open] })
+  }, { dependencies: [sectionsReady, open] })
 
   useGSAP(() => {
     if (!ready || !bar.current) return
@@ -66,7 +66,7 @@ export default function Nav({ ready }: { ready: boolean }) {
     <>
       <header ref={bar} className="fixed inset-x-0 top-0 z-50 mix-blend-difference">
         <div className="flex items-center justify-between px-[var(--pad)] py-5">
-          <button onClick={() => go('top')} className="group flex items-center gap-3 overflow-hidden text-bone" aria-label="Back to top" data-nav-in>
+          <button onClick={() => go('top')} className="group flex items-center gap-3 overflow-hidden text-bone" aria-label={`${person.name} — back to top`} data-nav-in>
             <span className="relative grid h-8 w-8 place-items-center">
               <span className="absolute inset-0 rounded-full border border-bone/40 transition-transform duration-700 group-hover:rotate-180 [border-style:dashed]" />
               <span className="h-2 w-2 rounded-full bg-ember" />

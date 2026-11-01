@@ -5,7 +5,7 @@ import { projects } from '../content/data'
 import Reveal from '../components/Reveal'
 import CaseStudy from './CaseStudy'
 
-function WorkIndex() {
+export function WorkIndex() {
   const root = useRef<HTMLElement>(null)
   const preview = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState<number | null>(null)
@@ -102,7 +102,7 @@ function WorkIndex() {
           style={{ clipPath: 'inset(50% 50% 50% 50% round 14px)' }}
         >
           {projects.map((p) => (
-            <img key={p.id} data-prev-img src={p.shots[0].src} alt="" className="block h-[250px] w-[400px] object-cover object-top" loading="lazy" />
+            <img key={p.id} data-prev-img src={p.shots[0].src.replace('.webp', '-sm.webp')} alt="" width={400} height={250} className="block h-[250px] w-[400px] object-cover object-top" loading="lazy" />
           ))}
         </div>
       </div>

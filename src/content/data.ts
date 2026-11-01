@@ -31,6 +31,7 @@ export const facts = [
   { k: 'Based', v: 'Vijayawada, Andhra Pradesh' },
   { k: 'Study', v: 'B.Tech CSE · KL University · 2023–27' },
   { k: 'Semester', v: '7th · CGPA 8.56' },
+  { k: 'Graduating', v: 'May 2027' },
   { k: 'Open to', v: 'Hyderabad · On-site / Hybrid / Remote' },
 ]
 
@@ -44,24 +45,28 @@ export const stats = [
 export const principles = [
   {
     n: '01',
+    widget: 'decide' as const,
     title: 'Keep decisions out of the LLM.',
     body: 'The model judges; a deterministic engine decides. Gemini returns one batched, Pydantic-validated judgment per return — and a 24-rule disposition engine makes the call.',
     proof: 'CUBE-0045 · ≤2 LLM round trips per return',
   },
   {
     n: '02',
+    widget: 'uncertain' as const,
     title: 'UNCERTAIN is a verdict.',
     body: 'Identity is confirmed only by matched product features or a barcode read. When the evidence isn’t there, the system says so instead of guessing — with an 85% confidence gate for auto-approval.',
     proof: 'CUBE-0045 · ZXing + OpenCV · perceptual hashing',
   },
   {
     n: '03',
+    widget: 'evidence' as const,
     title: 'Evidence, or it didn’t happen.',
     body: 'Every decision leaves a trail: SHA-256 hash-chained evidence records, decision logs and audit trails you can walk back to the exact input an agent examined.',
     proof: 'CUBE-0045 · CUBE Pod 05 · CommerceSense AI',
   },
   {
     n: '04',
+    widget: 'failopen' as const,
     title: 'Fail open — to humans.',
     body: 'When a model or a quota fails, work routes to human review — never to a guessed answer. Sign-off gates guard dispose, high-value and escalated cases.',
     proof: 'Human-in-the-loop by design',
@@ -71,6 +76,7 @@ export const principles = [
 export type Project = {
   id: string
   index: string
+  problem: string
   name: string
   kicker: string
   period: string
@@ -81,7 +87,7 @@ export type Project = {
   stack: string[]
   live: string
   code: string
-  shots: { src: string; alt: string }[]
+  shots: { src: string; alt: string; w: number; h: number }[]
   shape: number
   note?: string
 }
@@ -89,6 +95,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: 'cube-0045',
+    problem: 'Resellable returns get liquidated because nobody can inspect every parcel quickly and consistently — and the reasoning behind each call is rarely recorded.',
     index: '01',
     name: 'CUBE-0045',
     kicker: 'Returns Manager agent · CUBE Buildathon 2026',
@@ -111,14 +118,15 @@ export const projects: Project[] = [
     live: 'https://cube26-rtn-0045-upeshchowdary-1.onrender.com/',
     code: 'https://github.com/upeshchowdary/cube26-rtn-0045-upeshchowdary/tree/upeshchowdary',
     shots: [
-      { src: '/images/work/cube-0045__live_01_hero.webp', alt: 'CUBE-0045 landing — turn every return into a clear decision' },
-      { src: '/images/work/cube-0045__live_02_sample_decision.webp', alt: 'CUBE-0045 inspection card with identity, parts, condition and recommended disposition' },
-      { src: '/images/work/cube-0045__live_03_problem.webp', alt: 'CUBE-0045 — returns are decisions, not just refunds' },
+      { src: '/images/work/cube-0045__live_01_hero.webp', alt: 'CUBE-0045 landing — turn every return into a clear decision', w: 1568, h: 727 },
+      { src: '/images/work/cube-0045__live_02_sample_decision.webp', alt: 'CUBE-0045 inspection card with identity, parts, condition and recommended disposition', w: 1568, h: 727 },
+      { src: '/images/work/cube-0045__live_03_problem.webp', alt: 'CUBE-0045 — returns are decisions, not just refunds', w: 1568, h: 727 },
     ],
     shape: 2,
   },
   {
     id: 'pod-05',
+    problem: 'Five agents built separately had to become one commerce system — with a single record that follows a unit from supplier delivery to its final outcome.',
     index: '02',
     name: 'CUBE Pod 05',
     kicker: 'Five-agent commerce system · Team lead · Round 3',
@@ -142,14 +150,15 @@ export const projects: Project[] = [
     live: 'https://cube26-upeshchowdary-pod-5.onrender.com/',
     code: 'https://github.com/upeshchowdary/cube-round3-pod',
     shots: [
-      { src: '/images/work/pod05__01_hero.webp', alt: 'CUBE Pod 05 — five agents, one unit, one traceable outcome' },
-      { src: '/images/work/pod05__02_control_center.webp', alt: 'CUBE Pod 05 commerce control center' },
+      { src: '/images/work/pod05__01_hero.webp', alt: 'CUBE Pod 05 — five agents, one unit, one traceable outcome', w: 1568, h: 675 },
+      { src: '/images/work/pod05__02_control_center.webp', alt: 'CUBE Pod 05 commerce control center', w: 1568, h: 675 },
     ],
     shape: 2,
     note: 'Team build — I led the pod: complete UI design, agent integrations, backend logic and testing.',
   },
   {
     id: 'commercesense',
+    problem: 'Sellers usually discover stockouts, wasted ad spend and falling rank after they have already cost money.',
     index: '03',
     name: 'CommerceSense AI',
     kicker: 'AI-powered Amazon seller copilot',
@@ -172,14 +181,15 @@ export const projects: Project[] = [
     live: 'https://commercesense-frontend.vercel.app/',
     code: 'https://github.com/upeshchowdary/commercesense-ai',
     shots: [
-      { src: '/images/work/commercesense__01_hero.webp', alt: 'CommerceSense AI seller copilot landing' },
-      { src: '/images/work/commercesense__03_control_room.webp', alt: 'CommerceSense AI seller control room dashboard' },
-      { src: '/images/work/commercesense__02_research_agent.webp', alt: 'CommerceSense AI product research agent' },
+      { src: '/images/work/commercesense__01_hero.webp', alt: 'CommerceSense AI seller copilot landing', w: 1568, h: 727 },
+      { src: '/images/work/commercesense__03_control_room.webp', alt: 'CommerceSense AI seller control room dashboard', w: 1568, h: 727 },
+      { src: '/images/work/commercesense__02_research_agent.webp', alt: 'CommerceSense AI product research agent', w: 1568, h: 727 },
     ],
     shape: 3,
   },
   {
     id: 'roadwatch',
+    problem: 'New roads appear faster than maps get updated, and satellite change-detection is noisy — false alerts bury the real ones.',
     index: '04',
     name: 'RoadWatch AP',
     kicker: 'Satellite new-road detection · KL capstone · SIH1564',
@@ -202,13 +212,14 @@ export const projects: Project[] = [
     live: 'https://roadwatch-ap.onrender.com',
     code: 'https://github.com/upeshchowdary/AI-Based-Road-Extraction-and-New-Road-Alert-System-using-Multi-Temporal-Satellite-Images',
     shots: [
-      { src: '/images/work/roadwatch__01_hero.webp', alt: 'RoadWatch landing with a 3D globe' },
-      { src: '/images/work/roadwatch__02_map.webp', alt: 'RoadWatch live satellite map of Vijayawada with new-road alerts' },
+      { src: '/images/work/roadwatch__01_hero.webp', alt: 'RoadWatch landing with a 3D globe', w: 1568, h: 675 },
+      { src: '/images/work/roadwatch__02_map.webp', alt: 'RoadWatch live satellite map of Vijayawada with new-road alerts', w: 1568, h: 675 },
     ],
     shape: 4,
   },
   {
     id: 'stockwise',
+    problem: 'Raw market feeds don’t tell you much on their own — the goal was forecasts, signals and portfolio context in one place.',
     index: '05',
     name: 'StockWise AI',
     kicker: 'AI-powered stock prediction platform',
@@ -230,7 +241,7 @@ export const projects: Project[] = [
     stack: ['Python', 'NumPy', 'Machine Learning', 'Spring Boot', 'React', 'MySQL', 'Yahoo Finance API', 'JWT'],
     live: 'https://upeshchowdary.github.io/stockwise-ai/',
     code: 'https://github.com/upeshchowdary/stockwise-ai',
-    shots: [{ src: '/images/work/stockwise__01_hero.webp', alt: 'StockWise AI — real-time stock market intelligence' }],
+    shots: [{ src: '/images/work/stockwise__01_hero.webp', alt: 'StockWise AI — real-time stock market intelligence', w: 1568, h: 675 }],
     shape: 5,
   },
 ]
@@ -271,6 +282,33 @@ export const credentials = [
     cta: 'Profile',
   },
 ]
+
+export const leetcode = {
+  solved: 161,
+  rating: 1457,
+  split: [
+    { k: 'Easy', v: 117 },
+    { k: 'Medium', v: 41 },
+    { k: 'Hard', v: 3 },
+  ],
+}
+
+export const linguaskill = {
+  average: 166,
+  level: 'B2',
+  scale: { min: 82, max: 180 },
+  bands: [
+    { k: 'B1', v: 140 },
+    { k: 'B2', v: 160 },
+    { k: 'C1', v: 180 },
+  ],
+  skills: [
+    { k: 'Listening', v: 152, level: 'B1' },
+    { k: 'Reading', v: 180, level: 'C1+' },
+    { k: 'Speaking', v: 168, level: 'B2' },
+    { k: 'Writing', v: 158, level: 'B1' },
+  ],
+}
 
 export const toolkit = [
   { group: 'Agents & GenAI', items: ['LLMs', 'AI agents', 'Multi-agent systems', 'Agentic workflows', 'RAG', 'LangChain', 'Tool calling', 'Structured outputs', 'Agent memory', 'MCP', 'Multimodal AI', 'Vision-language models', 'NLP'] },

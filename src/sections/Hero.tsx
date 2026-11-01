@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { gsap, SplitText, useGSAP, scrollToId, prefersReducedMotion } from '../lib/motion'
+import { gsap, SplitText, useGSAP, scrollToId, prefersReducedMotion, isFinePointer } from '../lib/motion'
 import { useField } from '../lib/useField'
 import { person, roles } from '../content/data'
 import Magnetic from '../components/Magnetic'
@@ -16,7 +16,11 @@ export default function Hero({ ready }: { ready: boolean }) {
   useGSAP(() => {
     if (!ready || !title.current) return
     const reduced = prefersReducedMotion()
-    const split = SplitText.create(title.current, { type: 'lines', mask: 'lines', linesClass: 'split-line' })
+    const fine = isFinePointer()
+    // letters are only needed for the desktop cursor-proximity effect
+    const split = SplitText.create(title.current, fine && !reduced
+      ? { type: 'lines,words,chars', mask: 'lines', linesClass: 'split-line', charsClass: 'hchar' }
+      : { type: 'lines', mask: 'lines', linesClass: 'split-line' })
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
     if (!reduced) {
       tl.from(split.lines, { yPercent: 120, rotate: 3, transformOrigin: '0 100%', duration: 1.8, stagger: 0.11 }, 0.1)
@@ -44,7 +48,47 @@ export default function Hero({ ready }: { ready: boolean }) {
         scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
       })
     }
-    return () => split.revert()
+    // variable-weight proximity: letters near the cursor thin out (Cabinet Grotesk wght 800 → 260)
+    let cleanupProx = () => {}
+    if (!reduced && fine) {
+      const chars = (split.chars as HTMLElement[]).filter((c) => !c.closest('.serif-i'))
+      const setters = chars.map((c) => gsap.quickTo(c, '--w', { duration: 0.6, ease: 'power3.out' }))
+      const RADIUS = 210
+      let raf = 0
+      let px = -9999
+      let py = -9999
+      const update = () => {
+        raf = 0
+        chars.forEach((c, i) => {
+          const r = c.getBoundingClientRect()
+          const d = Math.hypot(px - (r.left + r.width / 2), py - (r.top + r.height / 2))
+          const f = Math.max(0, 1 - d / RADIUS)
+          setters[i](800 - 540 * f * f)
+        })
+      }
+      const move = (e: PointerEvent) => {
+        px = e.clientX
+        py = e.clientY
+        if (!raf) raf = requestAnimationFrame(update)
+      }
+      const leave = () => {
+        px = py = -9999
+        if (!raf) raf = requestAnimationFrame(update)
+      }
+      const h = root.current!
+      h.addEventListener('pointermove', move)
+      h.addEventListener('pointerleave', leave)
+      cleanupProx = () => {
+        h.removeEventListener('pointermove', move)
+        h.removeEventListener('pointerleave', leave)
+        cancelAnimationFrame(raf)
+      }
+    }
+
+    return () => {
+      cleanupProx()
+      split.revert()
+    }
   }, { scope: root, dependencies: [ready] })
 
   return (

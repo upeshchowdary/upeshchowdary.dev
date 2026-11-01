@@ -4,10 +4,14 @@ import { useField } from '../lib/useField'
 import type { Project } from '../content/data'
 import Reveal from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
+import SystemMap from '../components/SystemMap'
+import { maps } from '../content/maps'
 
 const host = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '')
 
-function BrowserShot({ src, alt, url }: { src: string; alt: string; url: string }) {
+const small = (src: string) => src.replace('.webp', '-sm.webp')
+
+function BrowserShot({ src, alt, url, w, h }: { src: string; alt: string; url: string; w: number; h: number }) {
   return (
     <figure data-shot className="overflow-hidden rounded-[18px] border border-line bg-surface shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
       <div className="flex items-center gap-3 border-b border-line px-4 py-3">
@@ -19,7 +23,18 @@ function BrowserShot({ src, alt, url }: { src: string; alt: string; url: string 
         <span className="mx-auto max-w-[70%] truncate rounded-full bg-ink px-4 py-1 font-mono text-[10px] text-muted">{url}</span>
       </div>
       <div className="relative overflow-hidden">
-        <img data-shot-img src={src} alt={alt} loading="lazy" decoding="async" className="block w-full origin-center" />
+        <img
+          data-shot-img
+          src={src}
+          srcSet={`${small(src)} 900w, ${src} 1568w`}
+          sizes="(min-width: 1024px) 55vw, 92vw"
+          width={w}
+          height={h}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className="block h-auto w-full origin-center"
+        />
       </div>
     </figure>
   )
@@ -69,12 +84,20 @@ export default function CaseStudy({ project: p, flip }: { project: Project; flip
             <Reveal as="p" className="serif-i mt-8 text-[clamp(1.6rem,2.4vw,2.4rem)] leading-[1.1] text-bone">
               {p.tagline}
             </Reveal>
-            <Reveal as="p" mode="fade" className="mt-6 text-[clamp(1rem,1.1vw,1.08rem)] leading-relaxed text-muted">
-              {p.summary}
-            </Reveal>
-            {p.note && <p className="mt-4 border-l-2 border-ember/60 pl-4 text-sm italic text-muted">{p.note}</p>}
+            <div className="mt-8 grid grid-cols-[6.5rem_1fr] gap-x-4 gap-y-5 border-t border-line pt-6">
+              <span className="label pt-1 !text-ember">Problem</span>
+              <Reveal as="p" mode="fade" className="text-[clamp(1rem,1.1vw,1.08rem)] leading-relaxed text-bone/85">
+                {p.problem}
+              </Reveal>
+              <span className="label pt-1">Built</span>
+              <Reveal as="p" mode="fade" className="text-[clamp(1rem,1.1vw,1.08rem)] leading-relaxed text-muted">
+                {p.summary}
+              </Reveal>
+            </div>
+            {p.note && <p className="mt-5 border-l-2 border-ember/60 pl-4 text-sm italic text-muted">{p.note}</p>}
 
-            <div data-metrics className="mt-10 grid grid-cols-2 border-t border-line">
+            <span className="label mt-10 block">Proof</span>
+            <div data-metrics className="mt-3 grid grid-cols-2 border-t border-line">
               {p.metrics.map((m, i) => (
                 <div data-metric key={m.label} className={`border-b border-line py-5 ${i % 2 === 1 ? 'border-l pl-5' : 'pr-5'}`}>
                   <div className="display text-[clamp(2rem,3.2vw,3.2rem)] text-bone">{m.value}</div>
@@ -106,9 +129,15 @@ export default function CaseStudy({ project: p, flip }: { project: Project; flip
         <div className={`space-y-10 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-6 lg:pl-6'}`}>
           {p.shots.map((s, i) => (
             <div key={s.src}>
-              <BrowserShot src={s.src} alt={s.alt} url={host(p.live)} />
+              <BrowserShot src={s.src} alt={s.alt} url={host(p.live)} w={s.w} h={s.h} />
+              {i === 0 && maps[p.id] && (
+                <div className="mt-10">
+                  <SystemMap data={maps[p.id]} id={p.id} />
+                </div>
+              )}
               {i === 0 && (
                 <ol className="mt-10 space-y-5">
+                  <li className="label">Approach</li>
                   {p.points.map((pt, j) => (
                     <li key={j} className="grid grid-cols-[3rem_1fr] gap-2 border-t border-line pt-5">
                       <span className="font-mono text-xs text-ember">{String(j + 1).padStart(2, '0')}</span>

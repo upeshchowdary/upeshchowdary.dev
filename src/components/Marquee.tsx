@@ -20,8 +20,13 @@ export default function Marquee({ items, reverse = false, className = '' }: { it
       skew += (Math.max(-8, Math.min(8, v * -0.35)) - skew) * 0.1
       el.style.transform = `translate3d(${x}px,0,0) skewX(${skew}deg)`
     }
-    gsap.ticker.add(tick)
-    return () => gsap.ticker.remove(tick)
+    let on = false
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !on) { gsap.ticker.add(tick); on = true }
+      else if (!e.isIntersecting && on) { gsap.ticker.remove(tick); on = false }
+    })
+    io.observe(el)
+    return () => { io.disconnect(); gsap.ticker.remove(tick) }
   }, [reverse])
 
   const row = [...items, ...items]

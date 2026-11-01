@@ -4,6 +4,7 @@ import { useField } from '../lib/useField'
 import { person } from '../content/data'
 import Magnetic from '../components/Magnetic'
 import Clock from '../components/Clock'
+import Wordmark from '../components/Wordmark'
 
 export default function Contact() {
   const root = useRef<HTMLElement>(null)
@@ -40,7 +41,7 @@ export default function Contact() {
   ]
 
   return (
-    <section ref={root} id="contact" className="relative flex min-h-[100svh] flex-col justify-between px-[var(--pad)] pb-8 pt-[clamp(6rem,14vh,10rem)]">
+    <section ref={root} id="contact" className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-[var(--pad)] pb-0 pt-[clamp(6rem,14vh,10rem)]">
       <div>
         <div className="flex items-center gap-4">
           <span className="label text-ember">REC-08</span>
@@ -48,7 +49,7 @@ export default function Contact() {
           <span className="label">Contact · Open to work</span>
         </div>
 
-        <a href={`mailto:${person.email}`} data-cta data-cursor="Write" className="group mt-10 block" aria-label={`Email ${person.email}`}>
+        <a href={`mailto:${person.email}`} data-cta data-cursor="Write" className="group mt-10 block">
           <span className="display block text-[clamp(3.4rem,10.5vw,13rem)] text-bone">
             <span className="block overflow-hidden"><span data-cta-line className="block">Let’s build</span></span>
             <span className="block overflow-hidden">
@@ -117,6 +118,9 @@ export default function Contact() {
           Back to top ↑
         </button>
       </footer>
+      <div className="-mx-[calc(var(--pad)*0.5)] mt-10">
+        <Wordmark text="UPESH CHOWDARY" />
+      </div>
     </section>
   )
 }

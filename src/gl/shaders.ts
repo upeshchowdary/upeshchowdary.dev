@@ -111,11 +111,17 @@ void main(){
   vec4 mv = viewMatrix * world;
   gl_Position = projectionMatrix * mv;
 
-  float size = uSize * (0.55 + aRand * 0.9);
+  // signal packets: a sparse set of particles pulse brighter and larger
+  float packet = step(0.988, fract(aRand * 517.3));
+  float pulse = packet * (0.5 + 0.5 * sin(uTime * 2.6 + aRand * 60.0));
+
+  // depth of field: nearer particles are larger and brighter, far ones recede
+  float depth = smoothstep(-13.5, -7.5, mv.z);
+  float size = uSize * (0.55 + aRand * 0.9) * (0.75 + depth * 0.5) * (1.0 + pulse * 1.6);
   gl_PointSize = size * uPixel * (10.0 / -mv.z);
 
-  vAlpha = (0.35 + 0.65 * fract(aRand * 43.7)) * (0.75 + storm * 0.25);
-  vEmber = step(1.0 - uEmber, fract(aRand * 91.3)) + push * 0.8;
+  vAlpha = (0.35 + 0.65 * fract(aRand * 43.7)) * (0.75 + storm * 0.25) * mix(0.4, 1.0, depth) + pulse * 0.9;
+  vEmber = step(1.0 - uEmber, fract(aRand * 91.3)) + push * 0.8 + packet;
 }
 `
 

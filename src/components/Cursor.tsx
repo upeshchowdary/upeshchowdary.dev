@@ -31,12 +31,15 @@ export default function Cursor() {
       const t = (e.target as HTMLElement).closest<HTMLElement>('[data-cursor], a, button')
       if (!t) {
         setLabel('')
+        ring.current?.removeAttribute('data-active')
         gsap.to(ring.current, { scale: 0.42, backgroundColor: 'rgba(255,77,31,0)', borderColor: 'rgba(237,232,223,0.35)', duration: 0.5 })
         gsap.to(dot.current, { scale: 1, duration: 0.3 })
         return
       }
       const l = t.dataset.cursor ?? ''
       setLabel(l)
+      if (l) ring.current?.setAttribute('data-active', '')
+      else ring.current?.removeAttribute('data-active')
       if (l) {
         gsap.to(ring.current, { scale: 1, backgroundColor: 'rgba(255,77,31,1)', borderColor: 'rgba(255,77,31,1)', duration: 0.5 })
         gsap.to(dot.current, { scale: 0, duration: 0.3 })
@@ -69,6 +72,7 @@ export default function Cursor() {
     <>
       <div
         ref={ring}
+        data-cursor-ring
         aria-hidden
         className="pointer-events-none fixed left-0 top-0 z-[100] -ml-12 -mt-12 flex h-24 w-24 items-center justify-center rounded-full border-[2.4px] opacity-0"
         style={{ borderColor: 'rgba(237,232,223,0.35)', transform: 'scale(0.42)' }}

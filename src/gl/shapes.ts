@@ -69,32 +69,51 @@ export function core(n: number) {
   return out
 }
 
-/** 1 · Agent network — nodes in an ellipsoid connected to nearest neighbours. */
+/** 1 · Orchestrated network — a hub (orchestrator), five agents in a chain, and their tools. */
 export function network(n: number) {
   const out = new Float32Array(n * 3)
   const r = rng(23)
-  const nodes: V3[] = []
-  for (let i = 0; i < 46; i++) {
-    nodes.push([gauss(r) * 1.55, gauss(r) * 0.95, gauss(r) * 0.8])
+  const hub: V3 = [0, 0, 0]
+  const agents: V3[] = []
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI / 2
+    agents.push([Math.cos(a) * 2.1, Math.sin(a) * 1.35, Math.sin(a * 2) * 0.45])
   }
-  const edges: [number, number][] = []
-  nodes.forEach((a, i) => {
-    const d = nodes
-      .map((b, j) => [j, (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2] as const)
-      .filter(([j]) => j !== i)
-      .sort((x, y) => x[1] - y[1])
-      .slice(0, 3)
-    d.forEach(([j]) => edges.push([i, j]))
+  const tools: { at: V3; parent: number }[] = []
+  agents.forEach((ag, i) => {
+    for (let k = 0; k < 6; k++) {
+      const dir: V3 = [ag[0] * 0.38 + gauss(r) * 0.42, ag[1] * 0.38 + gauss(r) * 0.42, gauss(r) * 0.42]
+      tools.push({ at: [ag[0] + dir[0], ag[1] + dir[1], ag[2] + dir[2]], parent: i })
+    }
   })
+  const edges: [V3, V3, number][] = [] // [a, b, weight]
+  agents.forEach((ag, i) => {
+    edges.push([hub, ag, 3]) // orchestrator ↔ agent
+    edges.push([ag, agents[(i + 1) % 5], i === 4 ? 0.6 : 2]) // the unit's journey
+  })
+  tools.forEach((t) => edges.push([agents[t.parent], t.at, 1]))
+  const totalW = edges.reduce((s, e) => s + e[2], 0)
+  const pickEdge = () => {
+    let x = r() * totalW
+    for (const e of edges) { x -= e[2]; if (x <= 0) return e }
+    return edges[0]
+  }
   for (let i = 0; i < n; i++) {
+    const k = r()
     let p: V3
-    if (r() < 0.34) {
-      const a = nodes[Math.floor(r() * nodes.length)]
-      const s = 0.07
+    if (k < 0.1) {
+      const s = 0.16
+      p = [gauss(r) * s, gauss(r) * s, gauss(r) * s] // dense orchestrator core
+    } else if (k < 0.3) {
+      const a = agents[Math.floor(r() * 5)]
+      const s = 0.09
       p = [a[0] + gauss(r) * s, a[1] + gauss(r) * s, a[2] + gauss(r) * s]
+    } else if (k < 0.38) {
+      const t = tools[Math.floor(r() * tools.length)].at
+      const s = 0.035
+      p = [t[0] + gauss(r) * s, t[1] + gauss(r) * s, t[2] + gauss(r) * s]
     } else {
-      const [ia, ib] = edges[Math.floor(r() * edges.length)]
-      const a = nodes[ia], b = nodes[ib]
+      const [a, b] = pickEdge()
       const t = r()
       const j = 0.012
       p = [a[0] + (b[0] - a[0]) * t + gauss(r) * j, a[1] + (b[1] - a[1]) * t + gauss(r) * j, a[2] + (b[2] - a[2]) * t + gauss(r) * j]

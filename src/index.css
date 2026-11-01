@@ -18,9 +18,10 @@
   --color-line: #2a2925;
   --color-bone: #ede8df;
   --color-muted: #8a857c;
-  --color-dim: #5a564f;
+  --color-dim: #868178;
   --color-ember: #ff4d1f;
   --color-ember-soft: #ff7a4d;
+  --color-ember-ink: #b8360f;
 
   --font-display: 'Cabinet Grotesk', ui-sans-serif, sans-serif;
   --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
@@ -73,6 +74,15 @@ body {
   html.has-cursor button {
     cursor: none;
   }
+}
+
+html.on-light [data-cursor-ring]:not([data-active]) {
+  border-color: rgba(11, 11, 10, 0.45) !important;
+}
+
+/* hero variable-weight proximity */
+.hchar {
+  font-variation-settings: 'wght' var(--w, 800);
 }
 
 /* ---------- type helpers ---------- */
