@@ -68,7 +68,7 @@ export default function About() {
             />
             <div className="absolute bottom-[6%] left-0 right-0 flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
               <span>fig. 01 — the builder</span>
-              <span>VJA · 16.5°N 80.6°E</span>
+              <span className="hidden sm:inline">VJA · 16.5°N 80.6°E</span>
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function About() {
           </div>
           <dl className="mt-10 border-t border-line">
             {facts.map((f) => (
-              <div key={f.k} className="grid grid-cols-[8rem_1fr] items-baseline gap-4 border-b border-line py-3.5">
+              <div key={f.k} className="grid grid-cols-[6.5rem_1fr] items-baseline gap-3 sm:grid-cols-[8rem_1fr] sm:gap-4 border-b border-line py-3.5">
                 <dt className="label">
                   <Scramble text={f.k} />
                 </dt>

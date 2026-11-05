@@ -130,9 +130,9 @@ export default function Hero({ ready }: { ready: boolean }) {
             I’m <span className="text-bone">{person.name}</span> — a CSE ’27 student at KL University building multi-agent systems, agentic automation and
             vision AI that stay grounded, measurable and accountable.
           </p>
-          <div className="mt-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em]">
+          <div className="mt-5 flex items-center gap-3 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.14em]">
             <span className="text-dim">Now building</span>
-            <span className="h-px w-8 bg-line" />
+            <span className="hidden h-px w-8 bg-line sm:block" />
             <span className="relative inline-block h-[1.4em] overflow-hidden text-bone">
               <span ref={roleTrack} className="flex flex-col">
                 {[...roles, roles[0]].map((r, i) => (
@@ -145,7 +145,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 md:col-span-4 md:col-start-7" data-hero-fade>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 md:col-span-4 md:col-start-7" data-hero-fade>
           <Magnetic>
             <button onClick={() => scrollToId('work')} className="btn btn-primary" data-cursor="View">
               <span data-magnetic-inner className="flex items-center gap-3">

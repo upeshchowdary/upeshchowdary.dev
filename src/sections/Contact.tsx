@@ -64,8 +64,8 @@ export default function Contact() {
       <div data-contact-grid className="mt-16 grid gap-10 border-t border-line pt-10 md:grid-cols-12">
         <div className="md:col-span-5" data-contact-fade>
           <span className="label">Email</span>
-          <div className="mt-3 flex flex-wrap items-center gap-4">
-            <a href={`mailto:${person.email}`} className="ulink text-[clamp(1.3rem,2.2vw,2rem)] font-semibold tracking-tight text-bone">
+          <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4">
+            <a href={`mailto:${person.email}`} className="ulink text-[clamp(1.05rem,4.5vw,2rem)] font-semibold tracking-tight text-bone md:text-[clamp(1.3rem,2.2vw,2rem)]">
               {person.email}
             </a>
             <button onClick={copy} className="rounded-full border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted transition-colors hover:border-ember hover:text-bone" aria-live="polite">

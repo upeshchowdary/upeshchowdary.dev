@@ -33,6 +33,11 @@ export default function SystemMap({ data, id }: { data: SystemMapData; id: strin
   const root = useRef<HTMLElement>(null)
   const [hover, setHover] = useState<string | null>(null)
   const byId = useMemo(() => Object.fromEntries(data.nodes.map((n) => [n.id, n])), [data])
+  const steps = useMemo(() => {
+    const m = new Map<number, MapNode[]>()
+    data.nodes.forEach((n) => m.set(n.step, [...(m.get(n.step) ?? []), n]))
+    return [...m.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v)
+  }, [data])
   const edges = useMemo(
     () => data.edges.map((e, i) => ({ ...e, key: `${id}-e${i}`, d: edgePath(byId[e.from], byId[e.to]) })),
     [data, byId, id],
@@ -64,6 +69,7 @@ export default function SystemMap({ data, id }: { data: SystemMapData; id: strin
         else tl.from(`[data-edge="${e.key}"]`, { drawSVG: '0%', duration: 0.7, ease: 'power2.inOut' }, at)
       })
       tl.to('[data-packets]', { autoAlpha: 1, duration: 0.6 })
+      gsap.from('[data-mstep]', { y: 24, opacity: 0, stagger: 0.12, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: root.current, start: 'top 80%' } })
       tl.from('[data-map-legend] > *', { autoAlpha: 0, y: 6, stagger: 0.05, duration: 0.5 }, '<')
     },
     { scope: root },
@@ -82,7 +88,34 @@ export default function SystemMap({ data, id }: { data: SystemMapData; id: strin
         <span className="text-[15px] font-semibold tracking-tight text-bone">{data.title}</span>
       </figcaption>
 
-      <div className="-mx-5 mt-6 overflow-x-auto px-5 md:mx-0 md:overflow-visible md:px-0" data-lenis-prevent-touch>
+      {/* phones: vertical step flow */}
+      <ol className="relative mt-6 md:hidden" aria-label={data.title}>
+        <span aria-hidden className="absolute bottom-3 left-[11px] top-3 w-px bg-line" />
+        <span aria-hidden className="absolute left-[8px] h-[7px] w-[7px] animate-[mapflow_3.4s_linear_infinite] rounded-full bg-ember shadow-[0_0_10px_2px_rgba(255,77,31,0.7)]" />
+        {steps.map((group, gi) => (
+          <li key={gi} data-mstep className="relative grid grid-cols-[24px_1fr] gap-3 pb-4 last:pb-0">
+            <span aria-hidden className="relative z-10 mt-3 grid h-[23px] w-[23px] place-items-center rounded-full border border-line bg-ink font-mono text-[9px] text-muted">
+              {gi + 1}
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {group.map((n) => (
+                <div key={n.id} className={`min-w-[44%] flex-1 rounded-xl border px-3 py-2 ${kindStyle[n.kind]}`}>
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-[13px] font-semibold leading-tight tracking-tight">{n.label}</span>
+                    <span className={`mt-px shrink-0 font-mono text-[8.5px] uppercase tracking-widest ${n.kind === 'hub' || n.kind === 'output' ? 'text-ink/60' : n.kind === 'ai' || n.kind === 'gate' ? 'text-ember' : 'text-muted'}`}>
+                      {kindTag[n.kind]}
+                    </span>
+                  </div>
+                  {n.sub && <div className={`mt-1 font-mono text-[10px] leading-snug ${n.kind === 'hub' || n.kind === 'output' ? 'text-ink/70' : 'text-muted'}`}>{n.sub}</div>}
+                </div>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      {/* tablets & desktop: full graph */}
+      <div className="mt-6 hidden md:block">
         <div className="relative min-w-[680px]" style={{ aspectRatio: `${VB_W} / ${VB_H}` }} onPointerLeave={() => setHover(null)}>
           <svg viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
             {edges.map((e) => {
@@ -152,7 +185,6 @@ export default function SystemMap({ data, id }: { data: SystemMapData; id: strin
           <li className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm border border-bone/50" />Deterministic</li>
           <li className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm border border-dashed border-ember-soft" />Gate</li>
           <li className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-ember" />Outcome</li>
-          <li className="md:hidden">· swipe →</li>
         </ul>
       </div>
     </figure>

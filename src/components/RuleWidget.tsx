@@ -3,7 +3,7 @@ import { gsap, useGSAP, prefersReducedMotion } from '../lib/motion'
 
 type Kind = 'decide' | 'uncertain' | 'evidence' | 'failopen'
 
-const pill = 'rounded-lg border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em]'
+const pill = 'whitespace-nowrap rounded-lg border px-2 py-1.5 font-mono text-[9px] uppercase tracking-[0.08em] sm:px-2.5 sm:text-[10px] sm:tracking-[0.12em]'
 
 /** Small live diagrams that prove each rule. Loops only while on screen. */
 export default function RuleWidget({ kind }: { kind: Kind }) {
@@ -78,8 +78,8 @@ export default function RuleWidget({ kind }: { kind: Kind }) {
       {kind === 'decide' && (
         <div className="relative flex items-center justify-between gap-2 py-3">
           <span className="absolute left-6 right-6 top-1/2 h-px bg-line" />
-          <span className={`${pill} relative border-ember/60 bg-[#1c120e] text-bone`}>LLM · judges</span>
-          <span data-n="rules" className={`${pill} relative border-line bg-ink text-muted`}>24 rules · decide</span>
+          <span className={`${pill} relative border-ember/60 bg-[#1c120e] text-bone`}>LLM judges</span>
+          <span data-n="rules" className={`${pill} relative border-line bg-ink text-muted`}>Rules decide</span>
           <span data-n="out" className={`${pill} relative border-line bg-ink text-muted`}>outcome</span>
           <span data-packet className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-ember opacity-0 shadow-[0_0_10px_2px_rgba(255,77,31,0.7)]" />
         </div>
@@ -100,13 +100,14 @@ export default function RuleWidget({ kind }: { kind: Kind }) {
       )}
 
       {kind === 'evidence' && (
-        <div className="flex items-center gap-1.5 py-2">
+        <div className="flex items-center gap-1 py-2 sm:gap-1.5">
           {['a3f9c1', '7be042', 'd51e8a', '09c7f3'].map((h, i, arr) => (
-            <div key={h} className="flex items-center gap-1.5">
-              <div data-block className="rounded-lg border border-line bg-ink px-2 py-1.5">
+            <div key={h} className="flex items-center gap-1 sm:gap-1.5">
+              <div data-block className="rounded-lg border border-line bg-ink px-1.5 py-1.5 sm:px-2">
                 <div className="font-mono text-[8.5px] uppercase tracking-widest text-dim">rec {i + 1}</div>
-                <div data-hash={i === arr.length - 1 ? 'last' : undefined} className="font-mono text-[10px] text-bone/80">
-                  {h}…
+                <div className="font-mono text-[9px] text-bone/80 sm:text-[10px]">
+                  <span data-hash={i === arr.length - 1 ? 'last' : undefined} className="sm:hidden">{h.slice(0, 4)}…</span>
+                  <span data-hash={i === arr.length - 1 ? 'last' : undefined} className="hidden sm:inline">{h}…</span>
                 </div>
               </div>
               {i < arr.length - 1 && <span className="text-[10px] text-ember">→</span>}
@@ -117,17 +118,17 @@ export default function RuleWidget({ kind }: { kind: Kind }) {
 
       {kind === 'failopen' && (
         <div className="relative h-[86px]">
-          <span className={`${pill} absolute left-0 top-[28%] -translate-y-1/2 border-line bg-ink text-muted`}>case</span>
-          <span data-n="model" className={`${pill} absolute left-[42%] top-[28%] -translate-y-1/2 border-line bg-ink text-muted`}>
+          <span className={`${pill} absolute z-10 left-0 top-[28%] -translate-y-1/2 border-line bg-ink text-muted`}>case</span>
+          <span data-n="model" className={`${pill} absolute z-10 left-[42%] top-[28%] -translate-y-1/2 border-line bg-ink text-muted`}>
             model
             <span data-x className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-ember text-[9px] text-ink">✕</span>
           </span>
-          <span className={`${pill} absolute right-0 top-[28%] -translate-y-1/2 border-dashed border-line bg-ink text-dim`}>guess</span>
-          <span data-n="human" className={`${pill} absolute right-0 top-[76%] -translate-y-1/2 border-bone/40 bg-ink text-bone`}>human review ✓</span>
+          <span className={`${pill} absolute z-10 right-0 top-[28%] -translate-y-1/2 border-dashed border-line bg-ink text-dim`}>guess</span>
+          <span data-n="human" className={`${pill} absolute z-10 right-0 top-[76%] -translate-y-1/2 border-bone/40 bg-ink text-bone`}>human review ✓</span>
           <span className="absolute left-[8%] right-[30%] top-[28%] h-px bg-line" />
           <span className="absolute left-[50%] top-[28%] h-[48%] w-px bg-line" />
           <span className="absolute left-[50%] right-[18%] top-[76%] h-px bg-line" />
-          <span data-packet className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ember opacity-0 shadow-[0_0_10px_2px_rgba(255,77,31,0.7)]" />
+          <span data-packet className="absolute z-20 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ember opacity-0 shadow-[0_0_10px_2px_rgba(255,77,31,0.7)]" />
         </div>
       )}
     </div>

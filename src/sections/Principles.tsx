@@ -11,6 +11,8 @@ export default function Principles() {
 
   useGSAP(() => {
     if (prefersReducedMotion()) return
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 768px)', () => {
     const cards = gsap.utils.toArray<HTMLElement>('[data-rule]')
     cards.forEach((card, i) => {
       const next = cards[i + 1]
@@ -20,6 +22,8 @@ export default function Principles() {
         scrollTrigger: { trigger: next, start: 'top 72%', end: 'top 22%', scrub: true },
       })
     })
+    })
+    return () => mm.revert()
   }, { scope: root })
 
   return (
@@ -47,12 +51,12 @@ export default function Principles() {
           <article
             key={p.n}
             data-rule
-            className="sticky mb-[8vh] last:mb-0"
+            className="mb-5 last:mb-0 md:sticky md:mb-[8vh]"
             style={{ top: `calc(14vh + ${i * 26}px)` }}
           >
             <div
               data-rule-inner
-              className="relative grid min-h-[58vh] origin-top overflow-hidden rounded-[28px] border border-line bg-[linear-gradient(160deg,#181816,#0f0f0e_60%)] p-[clamp(1.5rem,4vw,3.5rem)] md:grid-cols-12 md:gap-8"
+              className="relative grid origin-top gap-8 overflow-hidden rounded-[24px] border border-line bg-[linear-gradient(160deg,#181816,#0f0f0e_60%)] p-[clamp(1.25rem,4vw,3.5rem)] md:min-h-[58vh] md:grid-cols-12 md:rounded-[28px]"
             >
               <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-ember/10 blur-3xl" />
               <div className="flex flex-col justify-between gap-8 md:col-span-5">
@@ -71,11 +75,11 @@ export default function Principles() {
                 </div>
               </div>
               <div className="flex flex-col justify-end md:col-span-7">
-                <h3 className="text-[clamp(2rem,4.2vw,4.4rem)] font-bold leading-[0.98] tracking-[-0.035em] text-bone">{p.title}</h3>
-                <p className="mt-6 max-w-2xl text-[clamp(1rem,1.2vw,1.2rem)] leading-relaxed text-muted">{p.body}</p>
-                <div className="mt-8 inline-flex w-fit items-center gap-3 rounded-full border border-line px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-bone/80">
-                  <span className="text-ember">Seen in</span>
-                  <span className="h-3 w-px bg-line" />
+                <h3 className="text-[clamp(1.85rem,4.2vw,4.4rem)] font-bold leading-[0.98] tracking-[-0.035em] text-bone">{p.title}</h3>
+                <p className="mt-4 max-w-2xl sm:mt-6 text-[clamp(1rem,1.2vw,1.2rem)] leading-relaxed text-muted">{p.body}</p>
+                <div className="mt-8 flex w-fit flex-col gap-1.5 rounded-2xl border border-line px-4 py-2.5 font-mono text-[10.5px] uppercase leading-relaxed tracking-[0.12em] text-bone/80 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:py-2 sm:text-[11px]">
+                  <span className="whitespace-nowrap text-ember">Seen in</span>
+                  <span className="hidden h-3 w-px bg-line sm:block" />
                   {p.proof}
                 </div>
               </div>

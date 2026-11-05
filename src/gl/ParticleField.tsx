@@ -131,7 +131,9 @@ export default function ParticleField() {
         u.uFrom.value = fieldState.from
         u.uTo.value = fieldState.to
         u.uT.value = fieldState.t
-        u.uOpacity.value = fieldState.opacity
+        const narrow = window.innerWidth < 900
+        // on phones text sits over the field — keep it a quiet backdrop except in the hero
+        u.uOpacity.value = narrow ? fieldState.opacity * (fieldState.opacity < 0.99 ? 0.42 : 0.78) : fieldState.opacity
         u.uEmber.value = fieldState.ember
 
         // visible plane size at z=0
@@ -153,7 +155,7 @@ export default function ParticleField() {
 
         const wide = window.innerWidth >= 900
         const tx = wide ? fieldState.x : 0
-        const ty = wide ? fieldState.y : fieldState.y + (fieldState.x !== 0 ? 0.9 : 0)
+        const ty = wide ? fieldState.y : fieldState.y + (fieldState.x !== 0 ? 1.55 : 0)
         group.position.x += (tx - group.position.x) * 0.06
         group.position.y += (ty - group.position.y) * 0.06
         const s = fieldState.scale * (wide ? 1 : 0.62)

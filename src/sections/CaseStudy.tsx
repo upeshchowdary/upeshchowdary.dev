@@ -69,9 +69,9 @@ export default function CaseStudy({ project: p, flip }: { project: Project; flip
   return (
     <section ref={root} id={p.id} className="relative px-[var(--pad)] py-[clamp(4rem,10vh,8rem)]">
       <div className="h-px w-full bg-line" />
-      <div className={`mt-10 grid gap-12 lg:grid-cols-12 lg:gap-10 ${flip ? '' : ''}`}>
+      <div className={`mt-10 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10`}>
         {/* info */}
-        <div className={`lg:col-span-5 ${flip ? 'lg:order-2 lg:col-start-8' : ''}`}>
+        <div className={`min-w-0 lg:col-span-5 ${flip ? 'lg:order-2 lg:col-start-8' : ''}`}>
           <div className="lg:sticky lg:top-[12vh]">
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs text-ember">{p.index} / 05</span>
@@ -84,12 +84,12 @@ export default function CaseStudy({ project: p, flip }: { project: Project; flip
             <Reveal as="p" className="serif-i mt-8 text-[clamp(1.6rem,2.4vw,2.4rem)] leading-[1.1] text-bone">
               {p.tagline}
             </Reveal>
-            <div className="mt-8 grid grid-cols-[6.5rem_1fr] gap-x-4 gap-y-5 border-t border-line pt-6">
+            <div className="mt-8 grid grid-cols-1 gap-x-4 gap-y-2 border-t border-line pt-6 sm:grid-cols-[6.5rem_1fr] sm:gap-y-5">
               <span className="label pt-1 !text-ember">Problem</span>
               <Reveal as="p" mode="fade" className="text-[clamp(1rem,1.1vw,1.08rem)] leading-relaxed text-bone/85">
                 {p.problem}
               </Reveal>
-              <span className="label pt-1">Built</span>
+              <span className="label mt-4 pt-1 sm:mt-0">Built</span>
               <Reveal as="p" mode="fade" className="text-[clamp(1rem,1.1vw,1.08rem)] leading-relaxed text-muted">
                 {p.summary}
               </Reveal>
@@ -126,7 +126,7 @@ export default function CaseStudy({ project: p, flip }: { project: Project; flip
         </div>
 
         {/* evidence column */}
-        <div className={`space-y-10 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-6 lg:pl-6'}`}>
+        <div className={`min-w-0 space-y-10 lg:col-span-7 ${flip ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-6 lg:pl-6'}`}>
           {p.shots.map((s, i) => (
             <div key={s.src}>
               <BrowserShot src={s.src} alt={s.alt} url={host(p.live)} w={s.w} h={s.h} />
